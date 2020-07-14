@@ -1,3 +1,6 @@
+# Files containing credentials:
+mqtt_credentials.h
+
 # Prerequisites
 *.d
 
@@ -30,3 +33,5 @@
 *.exe
 *.out
 *.app
+
+rpi-display
