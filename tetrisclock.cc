@@ -10,9 +10,19 @@
 #include "pixel-mapper.h"
 #include "graphics.h"
 
+#include <assert.h>
+#include <getopt.h>
+#include <limits.h>
+#include <math.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
-#include "abeliansandpile.h"
+#include <algorithm>
+
+#include "tetrisclock.h"
 
 using std::max;
 using std::min;
@@ -21,7 +31,7 @@ using namespace rgb_matrix;
 
 // Abelian sandpile
 // Contributed by: Vliedel
-Sandpile::Sandpile(Canvas *m, int delay_ms)
+TetrisClock::TetrisClock(Canvas *m, int delay_ms)
     : ThreadedCanvasManipulator(m), delay_ms_(delay_ms)
 {
   width_ = canvas()->width() - 1;   // We need an odd width
@@ -50,7 +60,7 @@ Sandpile::Sandpile(Canvas *m, int delay_ms)
   }
 }
 
-Sandpile::~Sandpile()
+TetrisClock::~TetrisClock()
 {
   for (int x = 0; x < width_; ++x)
   {
@@ -64,7 +74,7 @@ Sandpile::~Sandpile()
   delete[] newValues_;
 }
 
-void Sandpile::Run()
+void TetrisClock::Run()
 {
   while (running() && !interrupt_received)
   {
@@ -99,7 +109,7 @@ void Sandpile::Run()
   }
 }
 
-void Sandpile::updateValues()
+void TetrisClock::updateValues()
 {
   // Copy values to newValues
   for (int x = 0; x < width_; ++x)

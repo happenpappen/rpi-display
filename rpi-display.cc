@@ -32,8 +32,11 @@
 #include "gameoflife.h"
 #include "imagescroller.h"
 #include "langtonsant.h"
+#include "pong.h"
+#include "tetrisclock.h"
 #include "globals.h"
 
+#define NOF_EFFECTS 6
 #define TERM_ERR "\033[1;31m"
 #define TERM_NORM "\033[0m"
 
@@ -115,17 +118,19 @@ static int usage(const char *progname)
 
 int main(int argc, char *argv[])
 {
-  int runtime_seconds = -1;
-  int demo = -1;
   int scroll_ms = 30;
   MyMosquitto *mosq = new MyMosquitto();
 
+  new_effect = -1;
+  running_effect = -1;
+  
   RGBMatrix::Options matrix_options;
   rgb_matrix::RuntimeOptions runtime_opt;
 
   // These are the defaults when no command-line flags are given.
-  matrix_options.rows = 32;
-  matrix_options.chain_length = 1;
+  matrix_options.rows = 16;
+  matrix_options.cols = 32;
+  matrix_options.chain_length = 4;
   matrix_options.parallel = 1;
 
   // First things first: extract the command line flags that contain
@@ -136,16 +141,13 @@ int main(int argc, char *argv[])
   }
 
   int opt;
-  while ((opt = getopt(argc, argv, "dD:t:r:P:c:p:b:m:LR:")) != -1)
+  while ((opt = getopt(argc, argv, "dD:r:P:c:p:b:m:LR:")) != -1)
   {
     switch (opt)
     {
     case 'D':
-      demo = atoi(optarg);
-      break;
-
-    case 't':
-      runtime_seconds = atoi(optarg);
+      new_effect = atoi(optarg);
+      running_effect = new_effect;
       break;
 
     case 'm':
@@ -204,7 +206,7 @@ int main(int argc, char *argv[])
     file_name = argv[optind];
   }
 
-  if (demo < 0)
+  if (new_effect < 0)
   {
     fprintf(stderr, TERM_ERR "Expected required option -D <demo>\n" TERM_NORM);
     return usage(argv[0]);
@@ -241,7 +243,7 @@ int main(int argc, char *argv[])
     if (effect_changed)
     {
       effect_changed = false;
-      if (new_effect > 0 && new_effect < 5)
+      if (new_effect > 0 && new_effect <= NOF_EFFECTS)
       {
         running_effect = new_effect;
       }
@@ -272,6 +274,12 @@ int main(int argc, char *argv[])
         if (!image_scroller->LoadPPM(file_name))
           return -1;
         image_gen = image_scroller;
+        break;
+      case 5:
+        image_gen = new Pong(canvas, scroll_ms);
+        break;
+      case 6:
+        image_gen = new TetrisClock(canvas, scroll_ms);
         break;
       }
       if (image_gen == NULL)

@@ -9,7 +9,7 @@ SRC_DIR=/home/cs/DevelopmentProjects/rpi-display
 
 CFLAGS=-Wall -O3 -g -Wextra -Wno-unused-parameter -Wno-deprecated-declarations -I$(RGB_INCDIR)
 CXXFLAGS=$(CFLAGS)
-OBJECTS=rpi-display.o abeliansandpile.o gameoflife.o imagescroller.o langtonsant.o
+OBJECTS=rpi-display.o abeliansandpile.o gameoflife.o imagescroller.o langtonsant.o pong.o tetrisclock.o utility.o
 BINARIES=rpi-display
 
 # Where our library resides. You mostly only need to change the

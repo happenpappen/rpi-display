@@ -10,17 +10,7 @@
 #include "pixel-mapper.h"
 #include "graphics.h"
 
-#include <assert.h>
-#include <getopt.h>
-#include <limits.h>
-#include <math.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-
-#include <algorithm>
 
 #include "gameoflife.h"
 #include "globals.h"
